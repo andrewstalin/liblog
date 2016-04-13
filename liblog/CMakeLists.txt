@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.2)
+set(CMAKE_CONFIGURATION_TYPES Debug Release CACHE TYPE INTERNAL FORCE)
+project(liblog)
+
+list(APPEND LIBLOG_FILES "")
+
+file(GLOB_RECURSE PROJECT_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/*.inl
+  ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/*.c
+)
+
+foreach(PROJECT_FILE ${PROJECT_FILES})
+    file(RELATIVE_PATH FILTER_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${PROJECT_FILE})
+
+	list(APPEND LIBLOG_FILES ${PROJECT_FILE})
+
+    string(REGEX REPLACE "(.*)(/[^/]*)$" "\\1" FILTER_PATH ${FILTER_PATH})
+    string(REPLACE / \\ FILTER_PATH ${FILTER_PATH})
+    source_group("${FILTER_PATH}" FILES ${PROJECT_FILE})
+endforeach()
+
+add_library(${PROJECT_NAME} STATIC ${LIBLOG_FILES})
+
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE "/MT$<$<CONFIG:Debug>:d>" PRIVATE "-W3")
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE "-std=c++14" PRIVATE "-Wall")
+endif()
+
+list(APPEND LIBLOG_INCLUDE_DIRS
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src"
+  "${CMAKE_SOURCE_DIR}/3rdparty/cppformat/")
+
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY INCLUDE_DIRECTORIES ${LIBLOG_INCLUDE_DIRS})
+
+

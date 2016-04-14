@@ -36,11 +36,9 @@ list(APPEND LIBLOG_TESTS_INCLUDE_DIRS
     "${CMAKE_SOURCE_DIR}/liblog/include"
     "${CMAKE_SOURCE_DIR}/3rdparty/gtest/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_SOURCE_DIR}/3rdparty/cppformat/"
 )
 
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY INCLUDE_DIRECTORIES ${LIBLOG_TESTS_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME} gtest)
 target_link_libraries(${PROJECT_NAME} liblog)
-target_link_libraries(${PROJECT_NAME} cppformat)

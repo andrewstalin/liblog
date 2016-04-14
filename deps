@@ -1,2 +1,1 @@
-cppformat https://github.com/cppformat/cppformat.git
 gtest git@10.128.0.14:common/gtest.git

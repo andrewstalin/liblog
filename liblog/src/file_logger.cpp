@@ -22,5 +22,5 @@ void liblog::FileLogger::write(const char* data, size_t size)
 
 void liblog::FileLogger::open_file_stream() noexcept
 {
-	stream_.open(path_, std::ios::out | std::ios::ate);
+	stream_.open(path_, std::ios::ate | std::ios::binary | std::ios::app);
 }

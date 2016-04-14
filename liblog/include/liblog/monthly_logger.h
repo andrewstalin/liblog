@@ -18,12 +18,14 @@ namespace liblog
 		uint8_t month_;
 
 	public:
-		MonthlyLogger(std::string&& path, LogLevel level, std::string&& filename_template); // cppformat string, for example "kp.{0}.{1}.log"
+		MonthlyLogger(std::string&& path, LogLevel level, std::string&& filename_template); // template filename string, for example "kp.%Y.%M.log"
 
 		void write(const char* data, size_t size) override;
 
 	private:
-		void next_rotation(uint16_t year, uint8_t month) noexcept;
+		void next_rotation(uint16_t year, uint8_t month);
+
+		std::string get_logfile_name() const;
 	};
 }
 

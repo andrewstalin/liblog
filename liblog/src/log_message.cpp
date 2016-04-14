@@ -1,8 +1,7 @@
-#include "liblog\log_message.h"
+#include "liblog/log_message.h"
 #include <chrono>
 #include <ctime>
 #include <thread>
-#include <iomanip>
 
 const std::hash<std::thread::id> thread_id_hash;
 const char* LOG_LEVEL_NAMES[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "" };
@@ -32,21 +31,23 @@ liblog::LogMessage::~LogMessage()
 }
 void liblog::LogMessage::initialize_log_message()
 {
-	auto now = std::chrono::system_clock::now();
-	auto now_time_t = std::chrono::system_clock::to_time_t(now);
-	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
-	auto time = std::gmtime(&now_time_t);
-
 	try
 	{
-		writer_ << fmt::format("{}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2}.{:0>3}", time->tm_year + 1900, time->tm_mon + 1, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec, milliseconds);
-		
-		//writer_ << time->tm_year;
-		//writer_ << (time->tm_mon >= 9 ? "-" : "-0") << time->tm_mon + 1;
-		//writer_ << (time->tm_mday > 9 ? "-" : "-0") << time->tm_mday;
-		//writer_ << (time->tm_hour > 9 ? "T" : "T0") << time->tm_hour;
-		//writer_ << (time->tm_min > 9 ? ":" : ":0") << time->tm_min;
-		//writer_ << (time->tm_sec > 9 ? ":" : ":0") << time->tm_sec << '.' << milliseconds;
+		auto now = std::chrono::system_clock::now();
+		auto now_time_t = std::chrono::system_clock::to_time_t(now);
+		auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
+		auto time = std::gmtime(&now_time_t);
+		time->tm_year += 1900;
+		time->tm_mon += 1;
+
+		/*writer_ << fmt::format("{}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2}.{:0>3}", time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec, milliseconds);*/
+
+		writer_ << time->tm_year;
+		writer_ << (time->tm_mon > 9 ? "-" : "-0") << time->tm_mon;
+		writer_ << (time->tm_mday > 9 ? "-" : "-0") << time->tm_mday;
+		writer_ << (time->tm_hour > 9 ? "T" : "T0") << time->tm_hour;
+		writer_ << (time->tm_min > 9 ? ":" : ":0") << time->tm_min;
+		writer_ << (time->tm_sec > 9 ? ":" : ":0") << time->tm_sec << '.' << milliseconds;
 
 		writer_ << " | " << thread_id_hash(std::this_thread::get_id());
 		writer_ << " | " << LogLevelName(log_level_) << " | " << function_ << " | ";

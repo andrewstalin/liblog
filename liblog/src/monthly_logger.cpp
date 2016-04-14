@@ -1,5 +1,4 @@
 #include "liblog/monthly_logger.h"
-#include "cppformat/format.h"
 #include <filesystem>
 
 namespace filesystem = std::tr2::sys;
@@ -8,14 +7,13 @@ using namespace liblog;
 MonthlyLogger::MonthlyLogger(std::string&& log_path, LogLevel level, std::string&& filename_template)
 	: log_path_(std::move(log_path)), filename_template_(std::move(filename_template))
 {
-	try
+	set_log_level(level);
+	filesystem::create_directories(filesystem::path(log_path));
+	
+	/*if (filename_template_.find("%Y") == filename_template_.npos || filename_template_.find("%M") == filename_template_.npos)
 	{
-		set_log_level(level);
-		filesystem::create_directories(filesystem::path(log_path));
-	}
-	catch (...)
-	{
-	}
+		throw std::invalid_argument("Bad filename template format. Must contain %M and %Y");
+	}*/
 }
 
 void MonthlyLogger::write(const char* data, size_t size)
@@ -37,18 +35,33 @@ void MonthlyLogger::write(const char* data, size_t size)
 	}
 }
 
-void MonthlyLogger::next_rotation(uint16_t year, uint8_t month) noexcept
+void MonthlyLogger::next_rotation(uint16_t year, uint8_t month)
 {
 	year_ = year;
 	month_ = month;
 
-	try
+	file_logger_ = std::make_unique<FileLogger>(filesystem::path(log_path_).append(get_logfile_name()).string(), log_level());
+}
+
+std::string liblog::MonthlyLogger::get_logfile_name() const
+{
+	auto year_string = std::to_string(year_);
+	auto month_string = (month_ > 9 ? "" : "0") + std::to_string(month_);
+	auto filename = filename_template_;
+
+	auto year_template_position = filename_template_.find("%Y");
+
+	if (year_template_position != filename_template_.npos)
 	{
-		auto date_template = fmt::format(filename_template_, "{}", "{:0>2}");
-		std::string file_name = fmt::format(date_template, year, month);
-		file_logger_ = std::make_unique<FileLogger>(filesystem::path(log_path_).append(file_name).string(), log_level());
+		filename.replace(year_template_position, 2, year_string);
 	}
-	catch (...)
+
+	auto month_template_position = filename_template_.find("%M");
+
+	if (month_template_position != filename_template_.npos)
 	{
+		filename.replace(month_template_position, 2, month_string);
 	}
+
+	return filename;
 }

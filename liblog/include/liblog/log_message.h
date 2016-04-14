@@ -2,6 +2,7 @@
 #define _LIBLOG_LOG_MESSAGE_H_
 
 #include "liblog/logger.h"
+#include "liblog/memory_writer.h"
 #include "cppformat/format.h"
 
 namespace liblog
@@ -12,7 +13,7 @@ namespace liblog
 		ILogger* logger_;
 		LogLevel log_level_;
 		const char* function_;
-		fmt::MemoryWriter writer_;
+		details::MemoryWriter writer_;
 
 	public:
 		LogMessage(ILogger* logger, const char* function, LogLevel log_level);

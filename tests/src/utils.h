@@ -1,3 +1,6 @@
+#ifndef _LIBLOG_TESTS_UTILS_LOGGER_H_
+#define _LIBLOG_TESTS_UTILS_LOGGER_H_
+
 #include <fstream>
 
 namespace details
@@ -14,11 +17,6 @@ namespace details
 
 		auto size = static_cast<std::streamsize>(input.tellg());
 
-		if (size == 0)
-		{
-			throw std::invalid_argument("Error. File is empty.");
-		}
-
 		input.seekg(0);
 		T data;
 		data.resize(static_cast<size_t>(size));
@@ -29,7 +27,14 @@ namespace details
 			throw std::runtime_error("can't read all data from file");
 		}
 
+		input.close();
 		return data;
 	}
 
+	inline bool contain(const std::string& string, const std::string& substring)
+	{
+		return string.find(substring) != string.npos;
+	}
 }
+
+#endif

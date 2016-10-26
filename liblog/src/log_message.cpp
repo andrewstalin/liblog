@@ -40,8 +40,6 @@ void liblog::LogMessage::initialize_log_message()
 		time->tm_year += 1900;
 		time->tm_mon += 1;
 
-		/*writer_ << fmt::format("{}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2}.{:0>3}", time->tm_year, time->tm_mon, time->tm_mday, time->tm_hour, time->tm_min, time->tm_sec, milliseconds);*/
-
 		writer_ << time->tm_year;
 		writer_ << (time->tm_mon > 9 ? "-" : "-0") << time->tm_mon;
 		writer_ << (time->tm_mday > 9 ? "-" : "-0") << time->tm_mday;

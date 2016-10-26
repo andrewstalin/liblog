@@ -72,19 +72,3 @@ TEST_P(LogLevelTest, log_level_test)
 }
 
 INSTANTIATE_TEST_CASE_P(, LogLevelTest, ::testing::Range(0, 7));
-
-
-TEST_F(LiblogTest, time_indicator)
-{
-	auto expected = "check ok";
-	liblog::set_logger(std::make_unique<liblog::FileLogger>(parameters::test_log_filename, liblog::LogLevel::LOG_LEVEL_INFO));
-	ASSERT_TRUE(filesystem::exists(parameters::test_log_filename));
-
-	for (int i = 0; i < 1000; ++i)
-	{
-		LOG_ERROR << expected;
-	}
-
-	auto actual = details::read_file<std::string>(parameters::test_log_filename);
-	EXPECT_TRUE(details::contain(actual, expected)) << actual;
-}

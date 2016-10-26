@@ -1,2 +1,2 @@
-cppformat https://github.com/cppformat/cppformat.git
+cmake-modules git@10.128.0.14:common/cmake-modules.git
 gtest git@10.128.0.14:common/gtest.git

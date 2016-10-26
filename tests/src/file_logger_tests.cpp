@@ -42,11 +42,9 @@ TEST(file_logger_case, append)
 
 	auto actual = details::read_file<std::string>(parameters::exists_log_filename);
 	auto pos = actual.find(old_message);
-	EXPECT_TRUE(pos != actual.npos);
+	EXPECT_NE(actual.npos, pos) << actual;
 	pos = actual.find(new_message, pos + old_message.size());
-	EXPECT_TRUE(pos != actual.npos);
-
-	EXPECT_FALSE(HasNonfatalFailure()) << actual;
+	EXPECT_NE(actual.npos, pos) << actual;
 }
 
 TEST(file_logger_case, time_indicator)

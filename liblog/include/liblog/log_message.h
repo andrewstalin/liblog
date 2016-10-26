@@ -3,7 +3,6 @@
 
 #include "liblog/logger.h"
 #include "liblog/memory_writer.h"
-#include "cppformat/format.h"
 
 namespace liblog
 {

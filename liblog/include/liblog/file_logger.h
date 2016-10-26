@@ -2,7 +2,7 @@
 #define _LIBLOG_FILE_LOGGER_H_
 
 #include "liblog/logger.h"
-#include <fstream>
+#include "liblog/file.h"
 #include <mutex>
 
 namespace liblog
@@ -10,8 +10,9 @@ namespace liblog
 	class FileLogger : public ILogger
 	{
 	private:
-		std::ofstream stream_;
+		std::unique_ptr<IFile> file_;
 		std::string path_;
+		bool need_flush_{ false };
 		mutable std::mutex mutex_;
 
 	public:
@@ -20,7 +21,7 @@ namespace liblog
 		virtual void write(const char* data, size_t size) override;
 
 	private:
-		void open_file_stream() noexcept;
+		void open_file() noexcept;
 	};
 }
 

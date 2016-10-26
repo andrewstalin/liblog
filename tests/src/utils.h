@@ -5,6 +5,10 @@
 
 namespace details
 {
+	constexpr size_t SMALL_SIZE = 256;
+	constexpr size_t MIDDLE_SIZE = 100 * 1024;
+	constexpr size_t BIG_SIZE = 1024 * 1024;
+
 	template<typename T>
 	T read_file(const std::string& filename)
 	{
@@ -31,10 +35,9 @@ namespace details
 		return data;
 	}
 
-	inline bool contain(const std::string& string, const std::string& substring)
-	{
-		return string.find(substring) != string.npos;
-	}
+	bool contain(const std::string& string, const std::string& substring);
+
+	std::string get_data(size_t size);
 }
 
 #endif

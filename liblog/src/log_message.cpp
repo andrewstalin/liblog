@@ -1,4 +1,5 @@
 #include "liblog/log_message.h"
+#include "liblog/datetime.h"
 #include <chrono>
 #include <ctime>
 #include <thread>
@@ -33,19 +34,13 @@ void liblog::LogMessage::initialize_log_message()
 {
 	try
 	{
-		auto now = std::chrono::system_clock::now();
-		auto now_time_t = std::chrono::system_clock::to_time_t(now);
-		auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000;
-		auto time = std::gmtime(&now_time_t);
-		time->tm_year += 1900;
-		time->tm_mon += 1;
-
-		writer_ << time->tm_year;
-		writer_ << (time->tm_mon > 9 ? "-" : "-0") << time->tm_mon;
-		writer_ << (time->tm_mday > 9 ? "-" : "-0") << time->tm_mday;
-		writer_ << (time->tm_hour > 9 ? "T" : "T0") << time->tm_hour;
-		writer_ << (time->tm_min > 9 ? ":" : ":0") << time->tm_min;
-		writer_ << (time->tm_sec > 9 ? ":" : ":0") << time->tm_sec << '.' << milliseconds;
+		auto now_time = DateTime::now();
+		writer_ << now_time.year;
+		writer_ << (now_time.month > 9 ? "-" : "-0") << now_time.month;
+		writer_ << (now_time.day > 9 ? "-" : "-0") << now_time.day;
+		writer_ << (now_time.hour > 9 ? "T" : "T0") << now_time.hour;
+		writer_ << (now_time.minute > 9 ? ":" : ":0") << now_time.minute;
+		writer_ << (now_time.second > 9 ? ":" : ":0") << now_time.second << '.' << now_time.millisecond;
 
 		writer_ << " | " << thread_id_hash(std::this_thread::get_id());
 		writer_ << " | " << LogLevelName(log_level_) << " | " << function_ << " | ";

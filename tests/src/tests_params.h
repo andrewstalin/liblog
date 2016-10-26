@@ -4,6 +4,7 @@
 namespace parameters
 {
 	constexpr char* samples_directory = "../samples/";
+	constexpr char* rotation_test_directory = "rotation_test/";
 	
 	constexpr char* russian_file_name = "имя на русском.log";
 	constexpr char* russian_file_name_utf8 = u8"имя на русском utf8.log";

@@ -13,7 +13,7 @@ liblog::VsOutputLogger::VsOutputLogger(LogLevel level)
 void liblog::VsOutputLogger::write(const char* data, size_t size)
 {
 	std::string message(data, data + size);
-	std::replace_if(message.begin(), message.end(), [](char ch) { return ch == '\0'; }, ' ');
+	std::replace_if(message.begin(), message.end(), [](char ch) { return ch == '\0'; }, '\r\n');
 	::OutputDebugString(message.c_str());
 }
 

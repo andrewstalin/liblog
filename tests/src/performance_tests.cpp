@@ -5,18 +5,6 @@
 #include "liblog/liblog.h"
 #include "liblog/file_logger.h"
 
-std::string GetData(size_t size)
-{
-	std::string data{ "check ok! " };
-
-	while (data.size() < size)
-	{
-		data.append(data);
-	}
-
-	return data;
-}
-
 std::thread CreateLogRoutine(const std::string& data, size_t iteration_count)
 {
 	std::thread th([data, iteration_count]()
@@ -68,42 +56,38 @@ void PerformanceTestAsync(const std::string& data, size_t iteration_count, size_
 	CheckPerformanceTest(data);
 }
 
-constexpr size_t SMALL_SIZE = 256;
-constexpr size_t MIDDLE_SIZE = 100*1024;
-constexpr size_t BIG_SIZE = 1024*1024;
-
 TEST(performance_case, small_data)
 {
-	auto data = GetData(SMALL_SIZE);
-	PerformanceTest(data, 2000);
+	auto data = details::get_data(details::SMALL_SIZE);
+	PerformanceTest(data, 4000);
 }
 
 TEST(performance_case, middle_data)
 {
-	auto data = GetData(MIDDLE_SIZE);
+	auto data = details::get_data(details::MIDDLE_SIZE);
 	PerformanceTest(data, 500);
 }
 
 TEST(performance_case, big_data)
 {
-	auto data = GetData(BIG_SIZE);
+	auto data = details::get_data(details::BIG_SIZE);
 	PerformanceTest(data, 100);
 }
 
 TEST(performance_case, small_data_async)
 {
-	auto data = GetData(SMALL_SIZE);
+	auto data = details::get_data(details::SMALL_SIZE);
 	PerformanceTestAsync(data, 500, 10);
 }
 
 TEST(performance_case, middle_data_async)
 {
-	auto data = GetData(MIDDLE_SIZE);
+	auto data = details::get_data(details::MIDDLE_SIZE);
 	PerformanceTestAsync(data, 300, 5);
 }
 
 TEST(performance_case, big_data_async)
 {
-	auto data = GetData(BIG_SIZE);
+	auto data = details::get_data(details::BIG_SIZE);
 	PerformanceTestAsync(data, 200, 4);
 }

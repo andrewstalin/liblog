@@ -33,7 +33,7 @@ namespace liblog
 
 		bool is_open() const override
 		{
-			return stream_.is_open();
+			return stream_.is_open() && stream_.good();
 		}
 
 	private:

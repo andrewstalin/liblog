@@ -1,2 +1,2 @@
-cmake-modules git@10.128.0.14:common/cmake-modules.git
-gtest git@10.128.0.14:common/gtest.git
+gtest https://github.com/google/googletest
+cmake-modules https://github.com/andrewstalin/cmake-modules.git

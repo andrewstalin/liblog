@@ -26,6 +26,8 @@ namespace liblog
 	void set_logger(std::unique_ptr<ILogger>&& logger);
 
 	extern std::unique_ptr<ILogger> LOGGER;
+
+	std::string to_hex_string(const uint8_t* data, size_t size);
 }
 
 #endif

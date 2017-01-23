@@ -5,9 +5,11 @@
 #include <thread>
 
 const std::hash<std::thread::id> thread_id_hash;
-const char* LOG_LEVEL_NAMES[] = { "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "" };
+const char* LOG_LEVEL_NAMES[]{ "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "" }; 
 
-const char* LogLevelName(liblog::LogLevel log_level)
+extern bool PERSISTENCE_FLAG;
+
+static inline const char* LogLevelName(liblog::LogLevel log_level)
 {
 	auto level = static_cast<uint8_t>(log_level);
 	return LOG_LEVEL_NAMES[level <= 5 ? level : 5];
@@ -24,7 +26,11 @@ liblog::LogMessage::~LogMessage()
 	try
 	{
 		writer_ << "\r\n";
-		logger_->write(writer_.data(), writer_.size());
+
+		if (PERSISTENCE_FLAG)
+		{
+			logger_->write(writer_.data(), writer_.size());
+		}
 	}
 	catch (...)
 	{

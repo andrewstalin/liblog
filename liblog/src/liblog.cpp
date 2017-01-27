@@ -2,12 +2,12 @@
 #include <sstream>
 #include <iomanip>
 
-void liblog::set_logger(std::unique_ptr<ILogger>&& logger)
-{
-	liblog::LOGGER = std::move(logger);
-}
+liblog::ILogger* liblog::LOGGER{ nullptr };
 
-std::unique_ptr<liblog::ILogger> liblog::LOGGER{ nullptr };
+void liblog::set_logger(ILogger* logger)
+{
+	liblog::LOGGER = logger;
+}
 
 std::string liblog::to_hex_string(const uint8_t* data, size_t size)
 {

@@ -28,9 +28,9 @@ RotationByDateLogger::RotationByDateLogger(std::string&& log_path, LogLevel leve
 	: log_path_(std::move(log_path)), filename_template_(std::move(filename_template)), rotation_date_parts_(rotation_date_parts)
 {
 	set_log_level(level);
-	filesystem::create_directories(log_path_);
+	filesystem::create_directories(std::tr2::sys::u8path(log_path_));
 
-	assert(filesystem::exists(log_path_));
+	assert(filesystem::exists(std::tr2::sys::u8path(log_path_)));
 	assert(!(rotation_date_parts_ & DateTimePart::YEAR) || filename_template_.find(SPECIFICATOR_YEAR) != std::string::npos);
 	assert(!(rotation_date_parts_ & DateTimePart::MONTH) || filename_template_.find(SPECIFICATOR_MONTH) != std::string::npos);
 	assert(!(rotation_date_parts_ & DateTimePart::DAY) || filename_template_.find(SPECIFICATOR_DAY) != std::string::npos);

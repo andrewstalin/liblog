@@ -12,8 +12,6 @@ namespace liblog
 	private:
 		std::unique_ptr<IFile> file_;
 		std::string path_;
-		bool need_flush_{ false };
-		mutable std::mutex mutex_;
 
 	public:
 		FileLogger(std::string&& path, LogLevel level);

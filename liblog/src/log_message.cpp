@@ -26,11 +26,7 @@ liblog::LogMessage::~LogMessage()
 	try
 	{
 		writer_ << "\r\n";
-
-		if (PERSISTENCE_FLAG)
-		{
-			logger_->write(writer_.data(), writer_.size());
-		}
+		logger_->write(writer_.data(), writer_.size());
 	}
 	catch (...)
 	{

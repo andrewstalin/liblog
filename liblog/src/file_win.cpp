@@ -2,45 +2,11 @@
 #include <cassert>
 #include <filesystem>
 
-std::unique_ptr<liblog::FileWinImpl> liblog::FileWinImpl::open(const std::string& path, FileAccess access, FileShare share, FileMode mode, uint32_t flags)
+std::unique_ptr<liblog::FileWinImpl> liblog::FileWinImpl::open(const std::string& path)
 {
-	DWORD desired_access{ 0 };
-	DWORD creation_disposition{ 0 };
-
-	switch (access)
-	{
-	case FileAccess::READ:
-		desired_access = FILE_GENERIC_READ;
-		break;
-	case FileAccess::WRITE:
-		desired_access = FILE_GENERIC_WRITE;
-		break;
-	case FileAccess::READ_WRITE:
-		desired_access = FILE_GENERIC_WRITE | FILE_GENERIC_READ;
-		break;
-	}
-
-	switch (mode)
-	{
-	case FileMode::F_CREATE_ALWAYS:
-		creation_disposition = CREATE_ALWAYS;
-		break;
-	case FileMode::F_CREATE_NEW:
-		creation_disposition = CREATE_NEW;
-		break;
-	case FileMode::F_OPEN_EXISTING:
-		creation_disposition = OPEN_EXISTING;
-		break;
-	case FileMode::F_OPEN_ALWAYS:
-		creation_disposition = OPEN_ALWAYS;
-		break;
-	case FileMode::F_TRUNCATE_EXISTING:
-		creation_disposition = TRUNCATE_EXISTING;
-		break;
-	}
-
-	DWORD attributes = flags == 0 ? FILE_ATTRIBUTE_NORMAL : static_cast<DWORD>(flags);
-	auto handle = ::CreateFileW(std::tr2::sys::path(path).wstring().c_str(), desired_access, static_cast<DWORD>(share), nullptr, creation_disposition, attributes, nullptr);
+	auto p = std::tr2::sys::u8path(path);
+	auto str = p.wstring();
+	auto handle = ::CreateFileW(str.c_str(), FILE_GENERIC_WRITE, FILE_SHARE_DELETE | FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_ALWAYS, FILE_FLAG_WRITE_THROUGH, nullptr);
 	return std::unique_ptr<FileWinImpl>(new FileWinImpl(handle));
 }
 

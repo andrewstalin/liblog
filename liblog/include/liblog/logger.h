@@ -21,7 +21,7 @@ namespace liblog
 		uint8_t log_level_{ static_cast<uint8_t>(LogLevel::LOG_LEVEL_WARN) };
 
 	public:
-		virtual ~ILogger();
+		virtual ~ILogger() {}
 
 		virtual void write(const char* data, size_t size) = 0;
 

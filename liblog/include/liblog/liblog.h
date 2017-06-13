@@ -14,7 +14,7 @@
 #define LOG_ERROR LOG_IF(liblog::LogLevel::LOG_LEVEL_ERROR, liblog::LOGGER != nullptr && liblog::LOGGER->check_log_level(liblog::LogLevel::LOG_LEVEL_ERROR))
 
 #define LOG_CONTEXT(level, context) liblog::LogMessage(liblog::LOGGER, context, level)
-#define LOG_IF_CONTEXT(level, condition, context) !(condition) ? (void)0 : LOG(level, context)
+#define LOG_IF_CONTEXT(level, condition, context) !(condition) ? (void)0 : LOG_CONTEXT(level, context)
 
 #define LOG_WARN_CONTEXT(context) LOG_IF_CONTEXT(liblog::LogLevel::LOG_LEVEL_WARN, liblog::LOGGER != nullptr && liblog::LOGGER->check_log_level(liblog::LogLevel::LOG_LEVEL_WARN), context)
 #define LOG_INFO_CONTEXT(context) LOG_IF_CONTEXT(liblog::LogLevel::LOG_LEVEL_INFO, liblog::LOGGER != nullptr && liblog::LOGGER->check_log_level(liblog::LogLevel::LOG_LEVEL_INFO), context)
